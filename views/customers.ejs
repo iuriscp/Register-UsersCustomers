@@ -1,0 +1,73 @@
+<%- include("top.ejs") %>
+
+    <div class="alert alert-info">
+      Total de Clientes cadastrados: <%= qty %> .
+    </div>
+    <div>
+      Mostrando <%= customers.length %> clientes .
+    </div>
+    <table class="table table-hover table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <td>Name</td>
+          <td>Age</td>
+          <td>CPF</td>
+          <td>Address</td>
+          <td>City</td>
+          <td>Edit</td>
+          <td>Delete</td>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <% customers.forEach(item => { %>
+        <tr>
+          <td><a style="color:black" title="Editar" href="/customers/edit/<%= item._id %>"><%= item.name %></a></td>
+          <td><%= item.idade%></td>
+          <td><%= item.cpf %></td>
+          <td><%= item.address%></td>
+          <td><%= item.cidade%>, <%= item.uf %></td>
+          <td>
+            <a class="btn btn-secondary"
+              href="/customers/edit/<%= item._id %>" title="Editar">
+              <img src="/images/edit_icon.png">
+            </a>
+          </td>
+          <td>
+            <a class="btn btn-danger"
+              href="/customers/delete/<%= item._id %>" 
+              onclick="return confirm('Deseja Excluir este cliente?')"
+              title="excluir">
+              <img src="/images/exclude_icon.png">
+            </a>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>  
+    </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        </li>
+        <% for(let i=1; i <= pagesQty; i++) { 
+            if(page === i) {%>
+                <li class="page-item"><a class="page-link active" href="/customers/<%= i %>"><%= i%></a></li>
+                <%
+            } else { %>
+                <li class="page-item"><a class="page-link" href="/customers/<%= i %>"><%= i%></a></li>
+        <% } } %>
+      </ul>
+    </nav>
+    <hr>
+    <div class="row">
+      <div class="col">
+        <a class="btn btn-primary" href="customers/new">Cadastrar</a>
+      </div>
+      <div class="col-2">
+        <a class="btn btn-secondary" href="/index" >Voltar</a>
+      </div>
+      <div class="col-2">
+        <form action="/logout" method="POST">
+          <input type="submit" value="Logout" class="btn btn-secondary" />
+        </form>
+      </div>
+    </div>
+<%- include("bottom.ejs")%>

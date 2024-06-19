@@ -1,0 +1,116 @@
+<%-include("top.ejs")%>
+    <p>Preencha os dados para cadstrar o Usuario</p>
+    <div class="col-6">
+        <form action="/users/new" method="POST">
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="name">Nome:</label>
+                    <input type="text" name="name" value="<%= user.name %>" class="form-control" placeholder="Nome completo do Usuario"/>   
+                </div>         
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="text" name="email" value="<%= user.email %>" class="form-control"/>   
+                </div>         
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="cpf">CPF:</label>
+                    <input type="text" name="cpf" value="<%= user.cpf %>" class="form-control"/>   
+                </div>         
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="uf">UF:</label>
+                    <select id="uf" name="uf" class="form-control">
+                        <option>Selecione a UF</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="cidade">Cidade:</label>
+                    <select id="cidade" name="cidade" class="form-control">
+                        <option>Selecione a cidade</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="address">Endereço:</label>
+                    <input type="text" name="address" class="form-control" value="<%= user.address %>" placeholder="Rua e numero da residência"/>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" name="password" value="" class="form-control" placeholder="Senha"/>   
+                </div>         
+            </div>      
+            <input type="hidden" name="id" value="<%= user._id %>"/>
+            <hr>
+            <p>
+                <input class="btn btn-primary" type="submit" value="Salvar"/>
+                <a class="btn btn-secondary" href="/users">Cancelar</a>
+            </p>
+        </form>
+    </div>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
+                .then(response => response.json())
+                .then(json => {
+                    const ufsHtml = document.getElementById('uf');
+                    const siglas = json.map(item => item.sigla).sort();
+                    siglas.forEach(item => {
+                        const opt = document.createElement("option");
+                        opt.innerText = item;
+                        opt.value = item;
+                        ufsHtml.appendChild(opt);
+                    });
+
+                    <% if (user.uf) { %>
+                        ufsHtml.value = "<%= user.uf %>";
+                        loadCities("<%= user.uf %>", "<%= user.cidade %>");
+                    <% } %>
+                })
+                .catch(error => alert("Erro ao buscar UFs: " + error));
+
+            document.getElementById('uf').addEventListener('change', function() {
+                const uf = this.value;
+                loadCities(uf);
+            });
+        });
+
+        function loadCities(uf, selectedCity = null) {
+            fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`)
+                .then(response => response.json())
+                .then(json => {
+                    const cidadesUf = document.getElementById('cidade');
+                    cidadesUf.innerHTML = '<option>Selecione a cidade</option>';
+                    const nomeCidades = json.map(item => item.nome).sort();
+                    nomeCidades.forEach(item => {
+                        const opt = document.createElement("option");
+                        opt.innerText = item;
+                        opt.value = item;
+                        cidadesUf.appendChild(opt);
+                    });
+
+                    // Se houver uma cidade pré-selecionada, definimos o valor dela
+                    if (selectedCity) {
+                            cidadesUf.value = selectedCity;
+                    }
+                })
+                .catch(error => alert("Erro ao buscar cidades: " + error));
+        }
+
+        if (window.location.search) {
+            const error = window.location.search.split('=')[1];
+            alert(decodeURI(error));
+        }
+        
+    </script>
+    
+<%- include("bottom.ejs") %>
