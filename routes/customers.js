@@ -3,8 +3,6 @@ const router = express.Router();
 const db = require("../db");
 
 
-
-
 router.get('/new', (request, response) => {
   response.render("newCustomer",{title:'Cadastro de cliente', customer: {}} );
 })
@@ -62,7 +60,7 @@ router.post('/new', (req, res, next) => {
 router.get('/:page?', async (req, res, next) => {
   const page = parseInt(req.params.page);
   try{
-      const qty = await db.totalCustomers();
+      const qty = await db.totalCustomers(); // await aguarda o total de customers do db
       const pagesQty = Math.ceil(qty / db.PAGE_SIZE);
       const customers = await db.findCustomers(page);
       res.render('customers', {title: "Clientes", customers, qty, pagesQty, page})

@@ -3,8 +3,6 @@ const router = express.Router();
 const db = require("../db");
 
 
-
-
 router.get('/new', (request, response) => {
   response.render("newUser",{title:'Cadastro de usuario', user: {}} );
 })
@@ -65,8 +63,6 @@ router.post('/new', (req, res, next) => {
     .then(result => 
       res.redirect('/users')
     )
-    
-  
 })
 
 /* GET home page. */
