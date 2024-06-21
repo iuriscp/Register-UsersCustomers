@@ -1,20 +1,27 @@
 <%- include("top.ejs") %>
 
-<div class="row">   
-  <div class="col-2">
-    <a href="/customers" class="btn btn-primary">Gestão de Clientes</a> 
-  </div>
-
-  <div class="col-2">
-    <a href="/users" class="btn btn-primary">Gestão de Usuário</a>
-  </div>
-
-  <div class="col-2">
-    <form action="/logout" method="POST">  
-      <input type="submit" value="Logout" class="btn btn-secondary"/>
-    </form>
-  </div>
-
+<div class="col-6">
+  <form action="/login" method="POST">
+    <div class="form-group mb-3">
+      <label for="name">Username: </label>
+      <input type="text" name="name" class="form-control" placeholder="Nome de usuário" />
+    </div>
+    <div class="form-group mb-3">
+      <label for="password">Password: </label>
+      <input type="password" name="password" class="form-control" placeholder="password" />
+    </div>
+    <input type="submit" value="Login" class="btn btn-primary" />
+  </form>
+  <hr />
+  <% if(message) { %>
+    <div class="alert alert-danger">
+      <%= message %>
+    </div>
+  <% } %>
+  <p>
+    <a class="btn btn-outline-secondary mb-3" href="/users/new">Não possui cadastro?</a>
+    <a class="btn btn-outline-secondary mb-3" href="/users/forgot">Esqueceu a senha?</a>
+  </p>
 </div>
 
 <%- include("bottom.ejs")%>

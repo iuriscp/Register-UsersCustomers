@@ -61,7 +61,7 @@ router.post('/new', (req, res, next) => {
                      : db.insertUser(user);
   promise //promise numa variavel
     .then(result => 
-      res.redirect('/users')
+      res.redirect('/')
     )
 })
 
