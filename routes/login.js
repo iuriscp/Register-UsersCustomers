@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require("../db");
 const { findUser } = require('../auth');
+const bcrypt = require("bcryptjs");
 
 /* GET home page. */
 //usando promisses
@@ -18,7 +19,7 @@ router.post('/login', async (req, res) => {
   if(!user) return res.render("login", {title:'Login', message:'Usuário e/ou senha INVÁLIDOS'});
 
   const password = req.body.password;
-  if(user.password !== password) return res.render("login", {title:'Login', message:'Usuário e/ou senha INVÁLIDOS'});
+  if(!bcrypt.compareSync(password, user.password)) return res.render("login", {title:'Login', message:'Usuário e/ou senha INVÁLIDOS'});
 
   res.redirect("/index");
 

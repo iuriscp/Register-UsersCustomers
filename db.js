@@ -5,7 +5,7 @@ AWAIT --> O codigo aguarda o final do processo para avançar e nao der erro
 */
     //carrega somente a classe mongoclient---> para inicializar uma conexao
 const { MongoClient, ObjectId}  = require("mongodb");
-
+const bcrypt = require("bcryptjs");
 const PAGE_SIZE = 8;
 
 async function connect(){
@@ -102,6 +102,8 @@ async function findUser(id){
 }
 
 async function insertUser(user){
+    user.password = bcrypt.hashSync(user.password, 12); 
+
     const connection = await connect();
     return connection
                 .collection("users")//comando mongodb 
@@ -109,6 +111,8 @@ async function insertUser(user){
 }
 
 async function updateUser(id, user){
+    if(user.password)
+        user.password = bcrypt.hashSync(user.password, 12);
     const connection = await connect();
     const objectId = ObjectId.createFromHexString(id);
     return connection
