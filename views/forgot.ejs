@@ -1,0 +1,22 @@
+<%- include("top.ejs") %>
+
+<div class="col-6">
+  <form action="/forgot" method="POST">
+    <div class="form-group mb-3">
+      <label for="name">Email cadastrado: </label>
+      <input type="email" name="email" class="form-control" placeholder="digite o email" />
+    </div>
+    <input type="submit" value="Submit" class="btn btn-primary" />
+  </form>
+  <hr />
+  <% if(message) { %>
+    <div class="alert alert-danger">
+      <%= message %>
+    </div>
+  <% } %>
+  <p>
+    <a class="btn btn-outline-secondary mb-3" href="/users/new">Não possui cadastro?</a>
+  </p>
+</div>
+
+<%- include("bottom.ejs")%>
