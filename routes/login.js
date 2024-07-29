@@ -2,11 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require("../db");
 const bcrypt = require("bcryptjs");
-const auth = require("../auth")
+const auth = require("../auth");
 
 /* GET home page. */
 //usando promisses
-
 
 router.get('/', (request, response) => {
   response.render("login",{title:'Login', message:""} );
