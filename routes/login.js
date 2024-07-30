@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../db");
 const bcrypt = require("bcryptjs");
 const auth = require("../auth");
+const sendMail = require("../mail")
 
 /* GET home page. */
 //usando promisses
@@ -40,9 +41,21 @@ router.post('/forgot', async(req, res) =>{
   const newPassword = auth.generatePassword();
   user.password = newPassword;
 
-  await db.updateUser(user._id.toString(), user);
-  
-  res.render("forgot", {title:"Forgot password?", message: newPassword}); 
+ try{
+    await db.updateUser(user._id.toString(), user);
+    await sendMail(user.email, "Senha alterada com sucesso", `
+      Olá ${user.name}, sua senha foi alterada com sucesso para: 
+            ${newPassword}
+      Use-a para se autenticar em ('site da aplicação')
+    
+      att.
+      adim !
+      `);
+
+    res.render("login", {title:"Login", message: "verifique sua caixa de email"});
+  } catch (err){
+    res.render("forgot", {title:"Forgot password?", message: err.message})
+  }
 })
 
 module.exports = router;

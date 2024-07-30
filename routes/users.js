@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require("../db");
-
+const sendMail = require("../mail")
 
 router.get('/new', (request, response) => {
   response.render("newUser",{title:'Cadastro de usuario', user: {}} );
@@ -32,7 +32,7 @@ router.get('/delete/:userId', (req, res) => {
      });
 })
 
-router.post('/new', (req, res, next) => {
+router.post('/new', async (req, res, next) => {
   const id = req.body.id;
 
   if(!req.body.name) 
@@ -57,12 +57,26 @@ router.post('/new', (req, res, next) => {
   if(req.body.password)
     user.password = req.body.password;
 
-  const promise = id ? db.updateUser(id, user)
-                     : db.insertUser(user);
-  promise //promise numa variavel
-    .then(result => 
-      res.redirect('/')
-    )
+  try{
+    await id 
+      ? db.updateUser(id, user)
+      : db.insertUser(user);
+
+      await sendMail(user.email, "Usuario criado com sucesso", `
+        Olá ${user.name} !, 
+        Seu usuario foi criado com sucesso!
+        Use sua senha para se autenticar em ('site da aplicação')
+      
+        att.
+        adim !
+        `);
+        
+        res.redirect('/');
+      }
+      catch(error) {
+        console.error(error);
+        res.render("error", {message: "Não foi posivel salvar o usuario", error})
+      };
 })
 
 /* GET home page. */
