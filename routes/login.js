@@ -3,7 +3,8 @@ const router = express.Router();
 const db = require("../db");
 const bcrypt = require("bcryptjs");
 const auth = require("../auth");
-const sendMail = require("../mail")
+const sendMail = require("../mail");
+const passport = require("passport");
 
 /* GET home page. */
 //usando promisses
@@ -16,18 +17,11 @@ router.get('/forgot', (request, response) => {
   response.render("forgot",{title:'Forgot password?', message:""} );
 })
 
-router.post('/login', async (req, res) => { 
-  const name = req.body.name;
-  const user = await auth.findUserByName(name); //função find da auth.js
-  
-  if(!user) return res.render("login", {title:'Login', message:'Usuário e/ou senha INVÁLIDOS'});
-
-  const password = req.body.password;
-  if(!bcrypt.compareSync(password, user.password)) return res.render("login", {title:'Login', message:'Usuário e/ou senha INVÁLIDOS'});
-
-  res.redirect("/index");
-
-})
+router.post('/login', passport.authenticate("local", {
+    successRedirect: "/index",
+    failureRedirect: "/error"
+    }
+  ))
 
 router.post('/forgot', async(req, res) =>{
   const email = req.body.email;
