@@ -4,6 +4,22 @@ const bcrypt = require("bcryptjs");
 const db = require("./db");
 
 module.exports = (passport) => {
+
+    //Transforma um objeto de usuario em string para salvar dentro da sessão
+    passport.serializeUser((user, done)=>{
+        done(null, user._id)
+    })
+
+    //recuperar informaçoes de usuario a partir da sessao
+    passport.deserializeUser(async(id, done)=>{
+        try{
+            const user = await db.findUser(id);
+            done(null, user);
+        }catch(err){
+            done(err, false);
+        }
+    })
+
     passport.use(new LocalStrategy({
         usernameField: "name",
         passwordField: "password"
