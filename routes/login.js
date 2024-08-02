@@ -16,6 +16,12 @@ router.get('/forgot', (request, response) => {
   response.render("forgot",{title:'Forgot password?', message:""} );
 })
 
+router.post("/logout", (req, res, next) => {
+  req.logOut(() => {
+    res.redirect("/");
+  })
+})
+
 router.post('/login', passport.authenticate("local", {
     successRedirect: "/index",
     failureRedirect: "/error"

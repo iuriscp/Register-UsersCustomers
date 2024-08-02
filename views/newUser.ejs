@@ -47,7 +47,16 @@
                     <label for="password">Senha:</label>
                     <input type="password" name="password" value="" class="form-control" placeholder="Senha"/>   
                 </div>         
-            </div>      
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="profile">Profile:</label>
+                    <select name="profile" class="form-control" value="<%= user.profile %>">
+                        <option value="1">Normal user</option>
+                        <option value="2">Admin</option>
+                    </select>
+                </div>         
+            </div>        
             <input type="hidden" name="id" value="<%= user._id %>"/>
             <hr>
             <p>

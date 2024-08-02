@@ -47,12 +47,13 @@ router.post('/new', async (req, res, next) => {
   
   const name = req.body.name;
   const email = req.body.email;
+  const profile = req.body.profile;
   const address = req.body.address;
   const cpf = req.body.cpf;
   const uf = req.body.uf;
   const cidade = req.body.cidade;
 
-  const user = {name, email, cpf, address, uf, cidade};
+  const user = {name, email, profile, cpf, address, uf, cidade};
 
   if(req.body.password)
     user.password = req.body.password;
@@ -71,7 +72,7 @@ router.post('/new', async (req, res, next) => {
         adim !
         `);
         
-        res.redirect('/');
+        res.redirect('/users');
       }
       catch(error) {
         console.error(error);

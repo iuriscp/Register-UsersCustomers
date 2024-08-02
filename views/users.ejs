@@ -11,6 +11,7 @@
         <tr>
           <td>Name</td>
           <td>CPF</td>
+          <td>Profile</td>
           <td>Email</td>
           <td>Address</td>
           <td>City</td>
@@ -23,6 +24,7 @@
         <tr>
           <td><a style="color:black" title="Editar" href="/users/edit/<%= item._id %>"><%= item.name %></a></td>
           <td><%= item.cpf %></td>
+          <td><%= parseInt(item.profile) === 1 ? "NORMAL USER" : "ADMIN"%></td>
           <td><%= item.email %></td>
           <td><%= item.address%></td>
           <td><%= item.cidade%>, <%= item.uf %></td>

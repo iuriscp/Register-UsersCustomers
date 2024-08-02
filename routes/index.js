@@ -7,7 +7,7 @@ const db = require("../db");
 
 
 router.get('/', (request, response) => {
-  response.render("index",{title:'Aplicação Com BootStrap'} );
+  response.render("index",{title:'Aplicação Com BootStrap', userProfile: parseInt(request.user.profile)} );
 })
 
 module.exports = router;
